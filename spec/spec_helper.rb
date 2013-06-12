@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'rspec'
+require 'rspec/expectations'
 require 'logger'
 require 'fileutils'
 
