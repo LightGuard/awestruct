@@ -1,13 +1,16 @@
+require 'awestruct/astruct'
+
 module Awestruct
-  class Page
+  class Page < Awestruct::AStruct
+
     attr_reader :dependencies
     attr_reader :layout
-    attr_reader :front_matter
-    attr_reader :relative_source_path
+    attr_reader :front_matter             # DONE
+    attr_reader :relative_source_path     # DONE
     attr_reader :output_path
     attr_reader :output_filename
-    attr_reader :source_path
-    attr_reader :raw_content
+    attr_reader :source_path              # DONE
+    attr_reader :raw_content              # DONE
     attr_reader :rendered_content
     attr_reader :content
 
@@ -16,6 +19,7 @@ module Awestruct
       @raw_content = []
 
       read_file file, site
+      super @front_matter
     end
 
     def render()
@@ -46,7 +50,6 @@ module Awestruct
         else
           @raw_content << line
         end
-        # TODO: parse front matter
         @raw_content = @raw_content.join
         @front_matter = YAML.load @front_matter.join
       end

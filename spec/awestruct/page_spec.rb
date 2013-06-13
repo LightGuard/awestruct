@@ -25,6 +25,7 @@ describe 'Awestruct::Page' do
   context 'a page with front-matter' do
     subject(:page) { Awestruct::Page.new 'test-data/front-matter-file-no-content.txt', @site }
     it { page.front_matter.should eql 'foo' => 'bar' }
+    it { page.foo.should eql 'bar' }
     it { page.source_path.should eql 'test-data/front-matter-file-no-content.txt' }
   end
   context 'a page with content' do
