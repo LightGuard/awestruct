@@ -6,6 +6,7 @@ describe 'Awestruct::Page' do
   before(:each) do
     @site = double()
     @site.stub_chain(:config, :dir).and_return('spec')
+    @site.stub(:output_dir).and_return('_site')
   end
   context 'a basic page' do
     subject(:page) { ::Awestruct::Page.new '', @site }
@@ -38,6 +39,22 @@ describe 'Awestruct::Page' do
     subject(:page) { Awestruct::Page.new 'testing', @site }
     it { page.raw_content.should eql 'testing' }
     it { page.source_path.should be_nil }
+  end
+  # The next three should be shared examples so I can refactor them a bit more, and be DRY
+  context 'should give a correct output path and filename' do
+    subject(:page) { Awestruct::Page.new 'test-data/page-loader/page-one.md', @site }
+    it { page.output_path.should eql '_site/test-data/page-loader/page-one.html' }
+    it { page.output_filename.should eql 'page-one.html' }
+  end
+  context 'should give a correct output path and filename if it is a regular file' do
+    subject(:page) { Awestruct::Page.new 'test-data/simple-file.txt', @site }
+    it { page.output_path.should eql '_site/test-data/simple-file.txt' }
+    it { page.output_filename.should eql 'simple-file.txt' }
+  end
+  context 'should give a correct output path and filename with double extensions' do
+    subject(:page) { Awestruct::Page.new 'test-data/page-loader/page-two.html.haml', @site }
+    it { page.output_path.should eql '_site/test-data/page-loader/page-two.html' }
+    it { page.output_filename.should eql 'page-two.html' }
   end
 end
 
