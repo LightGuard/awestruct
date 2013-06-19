@@ -14,30 +14,19 @@ module Awestruct
     attr_reader :source_path          # DONE
     attr_reader :raw_content          # DONE
     attr_reader :rendered_content
-    attr_reader :content
+    attr_reader :content              # DONE
+    attr_reader :source_path          # DONE
+    attr_reader :relative_source_path # DONE
 
     def initialize(resource, site)
       @site = site
       front_matter = []
       raw_content = []
 
-      read_file file, site
-      super @front_matter
-    end
-    
-    def render()
-    end
-
-    def ==
-
-    end
-
-    private
-    def read_file(resource, site) 
-      # TODO: read each line, separate out the front matter, everything else becomes raw_content
       if (File.exist?(File.join(site.config.dir, resource)) && File.file?(File.join(site.config.dir, resource)))
         resource_content = File.open(File.join(site.config.dir, resource)).readlines
-        @source_path = Pathname.new(File.join(site.config.dir, resource)).relative_path_from(Pathname.new site.config.dir).to_s
+        @source_path = Pathname.new(File.join(site.config.dir, resource))
+        @relative_source_path = @source_path.relative_path_from(Pathname.new site.config.dir).to_s
       else # Assume resource is a string
         resource_content = resource.split(/\n/)
       end
@@ -57,8 +46,14 @@ module Awestruct
         @raw_content = raw_content.join + front_matter.join
         @content = raw_content.join
       end
-      if Tilt[@source_path]
-        @template = Tilt.new File.join site.config.dir, @source_path
+
+      super @front_matter
+    end
+
+    def output_filename
+      # TODO need more tests to determine if all file types are accounted
+      if Tilt[@source_path] || @template
+        @template = Tilt.new File.join @source_path unless @template
         mime_type = Tilt[@source_path].default_mime_type
         unless mime_type
           # Can't rely on the mime-type from Tilt because it isn't there
@@ -77,11 +72,14 @@ module Awestruct
       super @front_matter
     end
 
-    def output_path()
-      Pathname.new(File.join(@site.output_dir, File.dirname(@source_path), @output_filename)).to_s
+    def output_path
+      unless @output_filename
+        self.output_filename
+      end
+      Pathname.new(File.join(@site.output_dir, File.dirname(@relative_source_path), @output_filename)).to_s
     end
 
-    def render()
+    def render
     end
 
     def ==

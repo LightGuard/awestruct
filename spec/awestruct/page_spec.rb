@@ -27,18 +27,18 @@ describe 'Awestruct::Page' do
     subject(:page) { Awestruct::Page.new 'test-data/front-matter-file-no-content.txt', @site }
     it { page.front_matter.should eql 'foo' => 'bar' }
     it { page.foo.should eql 'bar' }
-    it { page.source_path.should eql 'test-data/front-matter-file-no-content.txt' }
+    it { page.relative_source_path.should eql 'test-data/front-matter-file-no-content.txt' }
   end
   context 'a page with content' do
     subject(:page) { Awestruct::Page.new 'test-data/simple-file.txt', @site }
     it { page.raw_content.should_not be_nil }
     it { page.raw_content.should eql "howdy\n" }
-    it { page.source_path.should eql 'test-data/simple-file.txt' }
+    it { page.relative_source_path.should eql 'test-data/simple-file.txt' }
   end
   context 'should accept a string as content' do
     subject(:page) { Awestruct::Page.new 'testing', @site }
     it { page.raw_content.should eql 'testing' }
-    it { page.source_path.should be_nil }
+    it { page.relative_source_path.should be_nil }
   end
   # The next three should be shared examples so I can refactor them a bit more, and be DRY
   context 'should give a correct output path and filename' do
