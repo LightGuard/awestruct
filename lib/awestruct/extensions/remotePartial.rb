@@ -1,5 +1,4 @@
-require 'open-uri'
-require 'restclient'
+require 'net/http'
 
 module Awestruct
   module Extensions
@@ -18,21 +17,24 @@ module Awestruct
         response_body = ""
         if !File.exist?tmp_file
           $LOG.info url if $LOG.info? && !config.quiet
-          response_body = RestClient.get(url, :cache => false) { |response, request, result, &block|
-            case response.code
-            when 404
-                response
+          response_body = Net::HTTP.get_response (url) do |response|
+            case response
+            when Net::HTTPSuccess then
+              File.open(tmp_file, 'w') do |out|
+                out.write response.body
+              end
+              response.body
+            when Net::HTTPRedirect then
+              $LOG.warn "Remote Partial #{url} redirected to #{response['location']}, please update" if $LOG.warn?
+              ""
             else
-              response.return!(request, result, &block)
+              $LOG.error "Remote Partial #{url} error #{response.value}" if $LOG.error?
             end
-          }.body;
-          File.open(tmp_file, 'w') do |out|
-            out.write response_body
           end
         else
           response_body = File.read(tmp_file)
         end
-        return response_body
+        response_body
       end
 
 

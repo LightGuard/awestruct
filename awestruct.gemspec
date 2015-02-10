@@ -39,8 +39,6 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_dependency 'compass-960-plugin', '~> 0.10.4'
   s.add_dependency 'bootstrap-sass', '~> 3.2.0.2'
   s.add_dependency 'zurb-foundation', '~> 4.3.2'
-  s.add_dependency 'mime-types', '~> 2.1'
-  s.add_dependency 'rest-client', '~> 1.7.2'
   s.add_dependency 'ruby-s3cmd', '~> 0.1.5'
   s.add_dependency 'listen', '~> 2.7.1'
   s.add_dependency 'rack', '~> 1.5.2'
