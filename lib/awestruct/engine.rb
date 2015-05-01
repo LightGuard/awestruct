@@ -60,8 +60,10 @@ module Awestruct
       load_default_site_yaml( profile )
       $LOG.debug 'load_user_site_yaml -- profile' if $LOG.debug?
       load_user_site_yaml( profile )
+      puts "base_url after site.yml load: #{site.base_url}"
       $LOG.debug 'set_base_url' if $LOG.debug?
       set_base_url( base_url, default_base_url )
+      puts "base_url after set_base_url: #{site.base_url}"
       $LOG.debug 'load_yamls' if $LOG.debug?
       load_yamls
       $LOG.debug 'load_pipeline' if $LOG.debug?
