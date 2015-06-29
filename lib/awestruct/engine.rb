@@ -364,6 +364,8 @@ module Awestruct
         end
       rescue Exception => e
         $LOG.error 'An error occurred during output generation, all pages may not have completed during generation'
+        puts e.message
+        puts e.backtrace.inspect
         exit Awestruct::ExceptionHelper::EXITCODES[:generation_error]
       end
       site.engine.pipeline.execute_after_generation(site)
